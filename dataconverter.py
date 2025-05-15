@@ -10,27 +10,25 @@
 
 import os
 import re
-import numpy as np
-import pytesseract
-if os.name == 'nt':
-    pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-from pdf2image import convert_from_path
 import pandas as pd
+import numpy as np
+import fitz  # PyMuPDF
+import easyocr
+import io
+from PIL import Image
 from langdetect import detect
 from fuzzywuzzy import process
 import streamlit as st
 from tempfile import NamedTemporaryFile
 from openpyxl.styles import Alignment
 
-# --- Poppler Path Configuration for Windows ---
-
 # --- Configuration ---
 LANGUAGES = {
-    'en': 'eng',
-    'tr': 'tur',
-    'fr': 'fra',
-    'zh': 'chi_sim',
-    'nl': 'nld'
+    'en': 'en',
+    'tr': 'tr',
+    'fr': 'fr',
+    'zh': 'ch_sim',
+    'nl': 'nl'
 }
 
 KEYWORDS = {
@@ -43,15 +41,9 @@ NACE_HS_MAP = {
     'Calcium Chloride': ('20.13', '2827.20')
 }
 
-import fitz  # PyMuPDF
-from PIL import Image
-import io
-
-import easyocr
-
 reader = easyocr.Reader(['en', 'tr', 'fr', 'nl', 'zh'], gpu=False)
 
-def extract_text_from_pdf(pdf_path, lang_code='eng'):
+def extract_text_from_pdf(pdf_path, lang_code='en'):
     doc = fitz.open(pdf_path)
     text_blocks = []
     for page in doc:
@@ -63,12 +55,10 @@ def extract_text_from_pdf(pdf_path, lang_code='eng'):
                 image = Image.open(io.BytesIO(img_bytes))
                 result = reader.readtext(np.array(image), detail=0, paragraph=True)
                 text = "\n".join(result)
-            except Exception as e:
+            except Exception:
                 text = "[OCR failed: EasyOCR not available]"
         text_blocks.append(text)
     return "\n".join(text_blocks)
-
-
 
 
 
