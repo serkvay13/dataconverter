@@ -7,12 +7,21 @@
 # - Optional Google Sheets integration
 # - Multiple PDF file processing
 # - Streamlit-based GUI
-import fitz  # PyMuPDF
-from PIL import Image
-import io
+# dataconverter: Local OCR PDF to Excel Converter Tool
+# Features:
+# - Multi-language OCR
+# - Structured Excel export
+# - Product filtering
+# - NACE/HS Code prediction
+# - Optional Google Sheets integration
+# - Multiple PDF file processing
+# - Streamlit-based GUI
+
 import os
 import re
 import pytesseract
+if os.name == 'nt':
+    pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 from pdf2image import convert_from_path
 import pandas as pd
 from langdetect import detect
@@ -20,12 +29,6 @@ from fuzzywuzzy import process
 import streamlit as st
 from tempfile import NamedTemporaryFile
 from openpyxl.styles import Alignment
-if os.name == 'nt':
-    pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
-
-
-
 
 # --- Poppler Path Configuration for Windows ---
 
@@ -48,6 +51,9 @@ NACE_HS_MAP = {
     'Calcium Chloride': ('20.13', '2827.20')
 }
 
+import fitz  # PyMuPDF
+from PIL import Image
+import io
 
 def extract_text_from_pdf(pdf_path, lang_code='eng'):
     doc = fitz.open(pdf_path)
@@ -58,7 +64,9 @@ def extract_text_from_pdf(pdf_path, lang_code='eng'):
         image = Image.open(io.BytesIO(img_bytes))
         text = pytesseract.image_to_string(image, lang=lang_code)
         text_blocks.append(text)
-    return "\n".join(text_blocks)
+    return "
+".join(text_blocks)
+
 
 
 
