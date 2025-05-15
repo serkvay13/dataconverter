@@ -41,7 +41,7 @@ NACE_HS_MAP = {
     'Calcium Chloride': ('20.13', '2827.20')
 }
 
-reader = easyocr.Reader(['en', 'tr', 'fr', 'nl', 'zh'], gpu=False)
+reader = easyocr.Reader(['en', 'tr', 'fr', 'nl', 'ch_sim'], gpu=False)
 
 def extract_text_from_pdf(pdf_path, lang_code='en'):
     doc = fitz.open(pdf_path)
