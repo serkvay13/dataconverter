@@ -64,8 +64,8 @@ def extract_text_from_pdf(pdf_path, lang_code='eng'):
         image = Image.open(io.BytesIO(img_bytes))
         text = pytesseract.image_to_string(image, lang=lang_code)
         text_blocks.append(text)
-    return "
-".join(text_blocks)
+    return "\n".join(text_blocks)
+
 
 
 
