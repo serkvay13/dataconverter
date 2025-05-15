@@ -7,7 +7,9 @@
 # - Optional Google Sheets integration
 # - Multiple PDF file processing
 # - Streamlit-based GUI
-
+import fitz  # PyMuPDF
+from PIL import Image
+import io
 import os
 import re
 import pytesseract
@@ -41,7 +43,6 @@ NACE_HS_MAP = {
     'Calcium Chloride': ('20.13', '2827.20')
 }
 
-import fitz  # PyMuPDF
 
 def extract_text_from_pdf(pdf_path, lang_code='eng'):
     doc = fitz.open(pdf_path)
@@ -53,6 +54,7 @@ def extract_text_from_pdf(pdf_path, lang_code='eng'):
         text = pytesseract.image_to_string(image, lang=lang_code)
         text_blocks.append(text)
     return "\n".join(text_blocks)
+
 
 
 def detect_language(text):
