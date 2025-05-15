@@ -21,8 +21,6 @@ from tempfile import NamedTemporaryFile
 from openpyxl.styles import Alignment
 
 # --- Poppler Path Configuration for Windows ---
-POPPLER_PATH = r"C:\poppler-24.08.0\Library\bin"
-os.environ["PATH"] += os.pathsep + POPPLER_PATH
 
 # --- Configuration ---
 LANGUAGES = {
@@ -44,7 +42,7 @@ NACE_HS_MAP = {
 }
 
 def extract_text_from_pdf(pdf_path, lang_code='eng'):
-    images = convert_from_path(pdf_path, poppler_path=POPPLER_PATH)
+    images = convert_from_path(pdf_path)
     text_blocks = [pytesseract.image_to_string(img, lang=lang_code) for img in images]
     return "\n".join(text_blocks)
 
