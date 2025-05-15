@@ -51,8 +51,8 @@ def extract_text_from_pdf(pdf_path, lang_code='eng'):
         img_bytes = pix.tobytes("png")
         text = pytesseract.image_to_string(img_bytes, lang=lang_code)
         text_blocks.append(text)
-    return "
-".join(text_blocks)
+    return "\n".join(text_blocks)
+
 
 def detect_language(text):
     try:
