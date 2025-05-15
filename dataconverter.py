@@ -57,11 +57,12 @@ def extract_text_from_pdf(pdf_path, lang_code='en'):
                 img_bytes = pix.tobytes("png")
                 image = Image.open(io.BytesIO(img_bytes))
                 result = reader.readtext(np.array(image), detail=0, paragraph=True)
-                text = "\n".join(result).join(result)
+                text = "\n".join(result)
             except Exception:
                 text = "[OCR failed: EasyOCR not available]"
         text_blocks.append(text)
-    return "\n".join(text_blocks).join(text_blocks)
+    return "\n".join(text_blocks)
+
 
 
 
