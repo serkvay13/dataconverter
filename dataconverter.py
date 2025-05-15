@@ -10,6 +10,7 @@
 
 import os
 import re
+import numpy as np
 import pytesseract
 if os.name == 'nt':
     pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -46,6 +47,10 @@ import fitz  # PyMuPDF
 from PIL import Image
 import io
 
+import easyocr
+
+reader = easyocr.Reader(['en', 'tr', 'fr', 'nl', 'zh'], gpu=False)
+
 def extract_text_from_pdf(pdf_path, lang_code='eng'):
     doc = fitz.open(pdf_path)
     text_blocks = []
@@ -56,12 +61,13 @@ def extract_text_from_pdf(pdf_path, lang_code='eng'):
                 pix = page.get_pixmap(dpi=300)
                 img_bytes = pix.tobytes("png")
                 image = Image.open(io.BytesIO(img_bytes))
-                text = pytesseract.image_to_string(image, lang=lang_code)
-            except (ImportError, pytesseract.TesseractNotFoundError):
-                text = "[OCR failed: Tesseract not available]"
+                result = reader.readtext(np.array(image), detail=0, paragraph=True)
+                text = "\n".join(result)
+            except Exception as e:
+                text = "[OCR failed: EasyOCR not available]"
         text_blocks.append(text)
-    return "
-".join(text_blocks)
+    return "\n".join(text_blocks)
+
 
 
 
