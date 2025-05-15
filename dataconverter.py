@@ -13,7 +13,6 @@ import io
 import os
 import re
 import pytesseract
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 from pdf2image import convert_from_path
 import pandas as pd
 from langdetect import detect
@@ -21,6 +20,12 @@ from fuzzywuzzy import process
 import streamlit as st
 from tempfile import NamedTemporaryFile
 from openpyxl.styles import Alignment
+if os.name == 'nt':
+    pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
+
+
+
 
 # --- Poppler Path Configuration for Windows ---
 
@@ -54,6 +59,7 @@ def extract_text_from_pdf(pdf_path, lang_code='eng'):
         text = pytesseract.image_to_string(image, lang=lang_code)
         text_blocks.append(text)
     return "\n".join(text_blocks)
+
 
 
 
