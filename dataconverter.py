@@ -49,7 +49,8 @@ def extract_text_from_pdf(pdf_path, lang_code='eng'):
     for page in doc:
         pix = page.get_pixmap(dpi=300)
         img_bytes = pix.tobytes("png")
-        text = pytesseract.image_to_string(img_bytes, lang=lang_code)
+        image = Image.open(io.BytesIO(img_bytes))
+        text = pytesseract.image_to_string(image, lang=lang_code)
         text_blocks.append(text)
     return "\n".join(text_blocks)
 
