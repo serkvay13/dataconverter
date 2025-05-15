@@ -1,0 +1,8 @@
+streamlit
+pytesseract
+pdf2image
+langdetect
+fuzzywuzzy
+python-Levenshtein
+pandas
+openpyxl
