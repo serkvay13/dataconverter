@@ -30,7 +30,7 @@ NACE_HS_MAP = {
 }
 
 # --- OCR Reader with Caching ---
-@st.cache_resource
+@st.cache_resource(ttl=3600, max_entries=5)
 def get_ocr_reader(lang_code='en'):
     import easyocr
     return easyocr.Reader([lang_code], gpu=False)
