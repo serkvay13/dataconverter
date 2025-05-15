@@ -41,11 +41,12 @@ NACE_HS_MAP = {
     'Calcium Chloride': ('20.13', '2827.20')
 }
 
+# reader moved into function to prevent early model download
+# reader = easyocr.Reader(['en'], gpu=False)
 
 def extract_text_from_pdf(pdf_path, lang_code='en'):
     import easyocr
     reader = easyocr.Reader(['en'], gpu=False)
-
     doc = fitz.open(pdf_path)
     text_blocks = []
     for page in doc:
@@ -56,7 +57,8 @@ def extract_text_from_pdf(pdf_path, lang_code='en'):
                 img_bytes = pix.tobytes("png")
                 image = Image.open(io.BytesIO(img_bytes))
                 result = reader.readtext(np.array(image), detail=0, paragraph=True)
-                text = "\n".join(result)
+                text = "
+".join(result)
             except Exception:
                 text = "[OCR failed: EasyOCR not available]"
         text_blocks.append(text)
