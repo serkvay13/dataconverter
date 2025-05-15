@@ -41,10 +41,18 @@ NACE_HS_MAP = {
     'Calcium Chloride': ('20.13', '2827.20')
 }
 
+import fitz  # PyMuPDF
+
 def extract_text_from_pdf(pdf_path, lang_code='eng'):
-    images = convert_from_path(pdf_path)
-    text_blocks = [pytesseract.image_to_string(img, lang=lang_code) for img in images]
-    return "\n".join(text_blocks)
+    doc = fitz.open(pdf_path)
+    text_blocks = []
+    for page in doc:
+        pix = page.get_pixmap(dpi=300)
+        img_bytes = pix.tobytes("png")
+        text = pytesseract.image_to_string(img_bytes, lang=lang_code)
+        text_blocks.append(text)
+    return "
+".join(text_blocks)
 
 def detect_language(text):
     try:
