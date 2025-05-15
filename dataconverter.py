@@ -44,7 +44,7 @@ def extract_text_from_pdf(pdf_path, lang_code='en'):
         text = page.get_text()
         if not text.strip():
             try:
-                pix = page.get_pixmap(dpi=300)
+                pix = page.get_pixmap(dpi=150)
                 img_bytes = pix.tobytes("png")
                 image = Image.open(io.BytesIO(img_bytes))
                 result = reader.readtext(np.array(image), detail=0, paragraph=True)
