@@ -7,15 +7,6 @@
 # - Optional Google Sheets integration
 # - Multiple PDF file processing
 # - Streamlit-based GUI
-# dataconverter: Local OCR PDF to Excel Converter Tool
-# Features:
-# - Multi-language OCR
-# - Structured Excel export
-# - Product filtering
-# - NACE/HS Code prediction
-# - Optional Google Sheets integration
-# - Multiple PDF file processing
-# - Streamlit-based GUI
 
 import os
 import re
@@ -57,9 +48,20 @@ import io
 
 def extract_text_from_pdf(pdf_path, lang_code='eng'):
     doc = fitz.open(pdf_path)
-    return "\n".join([page.get_text() for page in doc])
-
-
+    text_blocks = []
+    for page in doc:
+        text = page.get_text()
+        if not text.strip():
+            try:
+                pix = page.get_pixmap(dpi=300)
+                img_bytes = pix.tobytes("png")
+                image = Image.open(io.BytesIO(img_bytes))
+                text = pytesseract.image_to_string(image, lang=lang_code)
+            except (ImportError, pytesseract.TesseractNotFoundError):
+                text = "[OCR failed: Tesseract not available]"
+        text_blocks.append(text)
+    return "
+".join(text_blocks)
 
 
 
